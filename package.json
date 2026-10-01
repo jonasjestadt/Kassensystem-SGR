@@ -1,0 +1,12 @@
+{
+  "name": "sg-loeschenrod-theke",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node dev/server.mjs . 8123"
+  },
+  "devDependencies": {
+    "@php-wasm/node": "3.1.56",
+    "@php-wasm/universal": "3.1.56"
+  }
+}

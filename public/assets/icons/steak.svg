@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+<path d="M11 40 C11 49 18 53 32 53 C46 53 53 49 53 40 Z" fill="#DE9A4C"/>
+<path d="M9 36 C9 32 14 30 20 30.5 C26 29 33 31 38 30 C45 29 55 31 55 36 C55 39.5 51 41 45 40.5 C38 42 30 40 24 41 C16 42 9 40 9 36 Z" fill="#8A4524"/>
+<g stroke="#5E2A12" stroke-width="1.8" stroke-linecap="round"><path d="M18 33 L23 38"/><path d="M28 32.5 L33 38"/><path d="M38 32 L43 37.5"/></g>
+<g fill="none" stroke-width="1.8"><ellipse cx="22" cy="29" rx="5" ry="2.4" stroke="#F3E6F3"/><ellipse cx="33" cy="28.4" rx="5.5" ry="2.4" stroke="#E9D6EA"/><ellipse cx="43" cy="29" rx="5" ry="2.3" stroke="#F3E6F3"/></g>
+<path d="M13 27 C13 18 20 13 32 13 C44 13 51 18 51 27 C51 28.5 50 29 48.5 29 H15.5 C14 29 13 28.5 13 27 Z" fill="#E8A95A"/>
+<path d="M19 19 C23 16 28 15.5 33 15.5" stroke="#F6CD91" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+<g fill="#FFF3D9"><ellipse cx="26" cy="21" rx="1.1" ry=".6"/><ellipse cx="33" cy="19" rx="1.1" ry=".6"/><ellipse cx="39" cy="22" rx="1.1" ry=".6"/><ellipse cx="30" cy="24" rx="1.1" ry=".6"/></g>
+</svg>

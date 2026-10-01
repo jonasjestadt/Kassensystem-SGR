@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+<defs>
+ <clipPath id="wc"><path d="M23 6 H41 C42 14 38 20 38.5 28 C39 36 42 42 41 50 Q40.5 57 36 57 H28 Q23.5 57 23 50 C22 42 25 36 25.5 28 C26 20 22 14 23 6 Z"/></clipPath>
+ <linearGradient id="wl" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F6B84A"/><stop offset="1" stop-color="#D9831C"/></linearGradient>
+</defs>
+<path d="M23 6 H41 C42 14 38 20 38.5 28 C39 36 42 42 41 50 Q40.5 57 36 57 H28 Q23.5 57 23 50 C22 42 25 36 25.5 28 C26 20 22 14 23 6 Z" fill="#EAF3F8"/>
+<g clip-path="url(#wc)">
+ <rect x="10" y="14" width="44" height="46" fill="url(#wl)"/>
+ <rect x="10" y="6" width="44" height="9" fill="#FFFAEB"/>
+ <path d="M25 8 C24.5 16 27.5 22 27 30" stroke="#fff" stroke-opacity=".55" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+</g>
+<path d="M23 6 H41 C42 14 38 20 38.5 28 C39 36 42 42 41 50 Q40.5 57 36 57 H28 Q23.5 57 23 50 C22 42 25 36 25.5 28 C26 20 22 14 23 6 Z" fill="none" stroke="#9DB4C0" stroke-width="1.6" stroke-linejoin="round"/>
+</svg>

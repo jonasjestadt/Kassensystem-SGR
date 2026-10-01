@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+<defs>
+ <clipPath id="wwc"><path d="M19.5 7 H44.5 C46 21 41.5 34 32 35 C22.5 34 18 21 19.5 7 Z"/></clipPath>
+ <linearGradient id="wwl" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F6E9A6"/><stop offset="1" stop-color="#E8CF62"/></linearGradient>
+</defs>
+<path d="M19.5 7 H44.5 C46 21 41.5 34 32 35 C22.5 34 18 21 19.5 7 Z" fill="#EAF3F8"/>
+<g clip-path="url(#wwc)">
+ <rect x="8" y="19" width="48" height="40" fill="url(#wwl)"/>
+ <ellipse cx="32" cy="19" rx="16" ry="1.4" fill="#fff" opacity=".4"/>
+ <path d="M22.5 10 C22 19 24 26 27 30" stroke="#fff" stroke-opacity=".6" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+</g>
+<path d="M19.5 7 H44.5 C46 21 41.5 34 32 35 C22.5 34 18 21 19.5 7 Z" fill="none" stroke="#9DB4C0" stroke-width="1.6" stroke-linejoin="round"/>
+<rect x="30.8" y="35" width="2.4" height="17" fill="#DCE8EE" stroke="#9DB4C0" stroke-width="1.2"/>
+<ellipse cx="32" cy="54.5" rx="11" ry="2.6" fill="#E3EDF2" stroke="#9DB4C0" stroke-width="1.4"/>
+</svg>

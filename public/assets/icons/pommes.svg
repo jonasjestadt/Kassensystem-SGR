@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+<g stroke="#D99A1E" stroke-width="1" stroke-linejoin="round">
+ <rect x="17" y="10" width="5" height="26" rx="1.2" fill="#FBCB4E" transform="rotate(-14 19 23)"/>
+ <rect x="24" y="6" width="5" height="30" rx="1.2" fill="#FFD95E" transform="rotate(-5 26 21)"/>
+ <rect x="30.5" y="5" width="5" height="31" rx="1.2" fill="#FBCB4E" transform="rotate(3 33 20)"/>
+ <rect x="37" y="7" width="5" height="29" rx="1.2" fill="#FFD95E" transform="rotate(10 39 21)"/>
+ <rect x="43" y="12" width="5" height="24" rx="1.2" fill="#FBCB4E" transform="rotate(18 45 24)"/>
+ <rect x="27" y="11" width="5" height="25" rx="1.2" fill="#FFE07A" transform="rotate(-12 29 23)"/>
+ <rect x="35" y="10" width="5" height="26" rx="1.2" fill="#FFE07A" transform="rotate(14 37 23)"/>
+</g>
+<path d="M13 28 H51 L46 57 H18 Z" fill="#E23D3D"/>
+<path d="M14.6 37 H49.4 L48.6 41.5 H15.4 Z" fill="#fff"/>
+<path d="M13 28 H51 L50.5 31 H13.5 Z" fill="#C42F2F"/>
+<path d="M22 30 C22 25 28 24 29 28 C30 25 35 25.5 34 30 Z" fill="#D7261E"/>
+<path d="M33 30 C33 25.5 39 24.5 40.5 28 C42 25.5 46 27 44.5 30 Z" fill="#FFFBEF" stroke="#EADFC4" stroke-width=".8"/>
+</svg>

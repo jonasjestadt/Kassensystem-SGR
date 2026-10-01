@@ -1,0 +1,2 @@
+# Richtiger Typ für das App-Manifest (Installation als App auf Android)
+AddType application/manifest+json .webmanifest

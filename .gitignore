@@ -1,0 +1,5 @@
+data/*
+!data/.htaccess
+.DS_Store
+node_modules/
+.claude/
