@@ -41,6 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ['Bratwurst mit Pommes', 'svg:bratwurst-pommes', 'essen', 600],
                 ['Steak mit Pommes',     'svg:steak-pommes',     'essen', 850],
             ];
+            $seed = array_merge($seed, NEW_PRODUCTS_V1);
             $p = $pdo->prepare('INSERT INTO products (name, icon, category, price_cents, sort) VALUES (?, ?, ?, ?, ?)');
             foreach ($seed as $i => [$n, $icon, $cat, $price]) {
                 $p->execute([$n, $icon, $cat, $price, ($i + 1) * 10]);

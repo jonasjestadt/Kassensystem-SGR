@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+<g transform="translate(32 35) scale(1.1) translate(-32 -42)">
+<ellipse cx="32" cy="43" rx="28" ry="13" fill="#FFFFFF" stroke="#C9D3D9" stroke-width="1.4"/>
+<ellipse cx="32" cy="42" rx="21" ry="8.6" fill="#EEF2F4"/>
+<g fill="#A4441E" stroke="#6E2410" stroke-width="1.1">
+ <ellipse cx="11.5" cy="41" rx="3.2" ry="4.6" transform="rotate(-12 11.5 41)"/>
+ <ellipse cx="18" cy="40" rx="3.2" ry="4.6" transform="rotate(-12 18 40)"/>
+ <ellipse cx="24.5" cy="39" rx="3.2" ry="4.6" transform="rotate(-12 24.5 39)"/>
+ <ellipse cx="31" cy="38" rx="3.2" ry="4.6" transform="rotate(-12 31 38)"/>
+</g>
+<path d="M8 39 C8 35 12 34 16 34.5 C20 33 24 34 28 33 C31 32.5 34.5 33.5 34 36.5 C33.5 38.5 31.5 38 30.5 39.5 C29 41.5 26.5 40 25.5 41.5 C24 43.5 21 42 19.5 43.5 C18 45 15 43.5 14 45 C12.5 46.5 9 45 9.5 43 C8.5 42 8 40.5 8 39 Z" fill="#C8281C"/>
+<path d="M11 37 C15 35.6 20 35.8 25 35" stroke="#E5533F" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+<g fill="#E9A23B"><circle cx="13" cy="38.5" r=".8"/><circle cx="18.5" cy="37.5" r=".8"/><circle cx="24" cy="37" r=".8"/><circle cx="29.5" cy="36" r=".8"/><circle cx="16" cy="41" r=".7"/><circle cx="22" cy="40" r=".7"/><circle cx="28" cy="38.8" r=".7"/></g>
+<g stroke="#D99A1E" stroke-width=".9" stroke-linejoin="round">
+ <rect x="35" y="33" width="20" height="4" rx="1.2" fill="#FBCB4E" transform="rotate(-18 45 35)"/>
+ <rect x="34" y="37" width="21" height="4" rx="1.2" fill="#FFD95E" transform="rotate(-6 44 39)"/>
+ <rect x="36" y="41" width="19" height="4" rx="1.2" fill="#FBCB4E" transform="rotate(8 45 43)"/>
+ <rect x="38" y="35" width="17" height="4" rx="1.2" fill="#FFE07A" transform="rotate(-30 46 37)"/>
+ <rect x="35" y="44" width="16" height="4" rx="1.2" fill="#FFE07A" transform="rotate(-12 43 46)"/>
+ <rect x="40" y="39" width="16" height="4" rx="1.2" fill="#FFD95E" transform="rotate(20 48 41)"/>
+</g>
+<path d="M45 33.5 C45 30.5 49.5 30 50.5 32.5 C52 30.8 55 32 53.8 34.5 Z" fill="#FFFBEF" stroke="#EADFC4" stroke-width=".8"/>
+</g>
+</svg>
