@@ -23,8 +23,8 @@ const ICON_ALIASES = ['softdrink' => 'cola', 'limo' => 'fanta'];
 const ICONS = [
     'getraenk' => [
         'geripptes' => 'Apfelwein im Gerippten', 'bembel' => 'Bembel',
-        'bier' => 'Bier', 'radler' => 'Radler', 'weizen' => 'Weizen', 'wein' => 'Weißwein', 'rotwein' => 'Rotwein',
-        'aperol' => 'Aperol Spritz', 'apfelschorle' => 'Apfelschorle',
+        'bier' => 'Bier', 'radler' => 'Radler', 'weizen' => 'Weißbier', 'wein' => 'Weißwein', 'rotwein' => 'Rotwein',
+        'aperol' => 'Aperol Spritz', 'schnaps' => 'Schnaps', 'apfelschorle' => 'Apfelschorle',
         'cola' => 'Cola', 'fanta' => 'Fanta / Orangenlimo', 'wasser' => 'Wasser', 'kaffee' => 'Kaffee',
     ],
     'essen' => [
@@ -94,6 +94,33 @@ function migrate(PDO $pdo): void
         CREATE INDEX IF NOT EXISTS idx_orders_created ON orders(created_at);
         CREATE INDEX IF NOT EXISTS idx_items_order ON order_items(order_id);
     ");
+
+    // Spalten, die nach der ersten Version dazugekommen sind
+    $cols = array_column($pdo->query('PRAGMA table_info(users)')->fetchAll(), 'name');
+    if (!in_array('failed_logins', $cols, true)) {
+        $pdo->exec('ALTER TABLE users ADD COLUMN failed_logins INTEGER NOT NULL DEFAULT 0');
+        $pdo->exec('ALTER TABLE users ADD COLUMN locked_until INTEGER NOT NULL DEFAULT 0');
+    }
+}
+
+// ------------------------------------------------------- Zugangsdaten
+
+const MAX_FAILED_LOGINS = 5;      // danach wird der Zugang gesperrt …
+const LOCK_MINUTES = 5;           // … für so viele Minuten
+
+/** Kasse meldet sich mit 4-stelliger PIN an, Vorstand mit Passwort. */
+function uses_pin(string $role): bool
+{
+    return $role === 'kasse';
+}
+
+/** Prüft PIN bzw. Passwort für eine Rolle; liefert Fehlermeldung oder null. */
+function credential_error(string $role, string $secret): ?string
+{
+    if (uses_pin($role)) {
+        return preg_match('/^\d{4}$/', $secret) ? null : 'Die PIN muss aus genau 4 Ziffern bestehen.';
+    }
+    return mb_strlen($secret) >= 6 ? null : 'Das Passwort muss mindestens 6 Zeichen haben.';
 }
 
 function needs_setup(): bool
@@ -296,7 +323,7 @@ function page_header(string $title, ?array $user = null, string $active = '', st
 </head>
 <body class="<?= e($bodyClass) ?>">
 <header class="topbar">
-  <a class="brand" href="kasse.php"><img src="assets/logo.png" alt="" width="26" height="29">SG Löschenrod</a>
+  <a class="brand" href="kasse.php"><img src="assets/logo.png" alt="" width="38" height="42">SG Löschenrod</a>
   <button type="button" class="theme-toggle" aria-label="Hell/Dunkel umschalten" title="Hell/Dunkel umschalten">
     <svg class="i-moon" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11z" fill="currentColor"/></svg>
     <svg class="i-sun" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5" fill="currentColor"/><g stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></g></svg>
@@ -325,6 +352,18 @@ function page_header(string $title, ?array $user = null, string $active = '', st
   <script>
     (function () {
       var bar = document.currentScript.parentNode, btn = bar.querySelector('.menu-toggle');
+      var nav = bar.querySelector('nav'), brand = bar.querySelector('.brand');
+      // Menü-Knopf statt Leiste, sobald die Einträge nicht in eine Zeile passen
+      // (schmaler Bildschirm oder vergrößerte Systemschrift)
+      function layout() {
+        bar.classList.remove('compact', 'open');
+        var tight = window.innerWidth <= 700 || nav.scrollWidth > nav.clientWidth + 1 ||
+          brand.scrollWidth > brand.clientWidth + 1 || bar.scrollWidth > bar.clientWidth + 1;
+        bar.classList.toggle('compact', tight);
+      }
+      layout();
+      window.addEventListener('resize', layout);
+      if (document.fonts) document.fonts.ready.then(layout);
       btn.addEventListener('click', function () {
         var open = bar.classList.toggle('open');
         btn.setAttribute('aria-expanded', open);
@@ -367,5 +406,24 @@ function page_header(string $title, ?array $user = null, string $active = '', st
 
 function page_footer(): void
 {
-    echo "\n</body>\n</html>\n";
+    ?>
+<script>
+  // Lange Texte (z. B. Artikelnamen) verkleinern statt umbrechen
+  window.fitText = function (root) {
+    (root || document).querySelectorAll('.tile-name, .icon-grid button span:not(.ico), .fit').forEach(function (el) {
+      el.style.fontSize = '';
+      var size = parseFloat(getComputedStyle(el).fontSize);
+      while (el.clientWidth && el.scrollWidth > el.clientWidth && size > 12) {
+        size -= 0.5;
+        el.style.fontSize = size + 'px';
+      }
+    });
+  };
+  fitText();
+  window.addEventListener('resize', function () { fitText(); });
+  if (document.fonts) document.fonts.ready.then(function () { fitText(); });
+</script>
+</body>
+</html>
+<?php
 }

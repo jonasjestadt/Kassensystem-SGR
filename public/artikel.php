@@ -239,6 +239,7 @@ page_header('Artikel', $user, 'artikel.php');
         var value = document.getElementById(btn.dataset.for).value;
         dialog.querySelectorAll('[data-icon]').forEach(function (o) { o.classList.toggle('on', o.dataset.icon === value && value !== ''); });
         dialog.showModal();
+        fitText(dialog);
       });
     });
 

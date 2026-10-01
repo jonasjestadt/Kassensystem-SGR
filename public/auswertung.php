@@ -141,7 +141,7 @@ page_header('Auswertung', $user, 'auswertung.php');
         <?php foreach ($list as $r): ?>
           <tr>
             <td class="icon-cell"><?= icon_html($r['icon']) ?></td>
-            <td><?= e($r['name']) ?></td>
+            <td class="c-pname"><span class="fit"><?= e($r['name']) ?></span></td>
             <td class="num"><strong><?= (int) $r['qty'] ?></strong><div class="bar bar-inline"><i style="width:<?= round($r['qty'] / $maxQty * 100, 1) ?>%"></i></div></td>
             <td class="c-bar"><div class="bar"><i style="width:<?= round($r['qty'] / $maxQty * 100, 1) ?>%"></i></div></td>
             <td class="num"><?= e(euro((int) $r['revenue'])) ?></td>
@@ -183,7 +183,7 @@ page_header('Auswertung', $user, 'auswertung.php');
           <tr>
             <td class="c-time"><?= e(date('d.m. H:i', strtotime($o['created_at']))) ?> <span class="muted c-who-inline">· <?= e($o['username']) ?></span></td>
             <td class="c-who"><?= e($o['username']) ?></td>
-            <td class="c-items"><?= e($o['items']) ?></td>
+            <td class="c-items" title="<?= e($o['items']) ?>"><span class="fit"><?= e($o['items']) ?></span></td>
             <td class="num c-sum"><?= e(euro((int) $o['total_cents'])) ?></td>
             <td class="num c-del">
               <form method="post" class="inline-form" onsubmit="return confirm('Bestellung entfernen?')">

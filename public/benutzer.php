@@ -22,8 +22,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $name = trim((string) ($_POST['username'] ?? ''));
             if (!preg_match('/^[\p{L}0-9._-]{2,30}$/u', $name)) {
                 flash('Benutzername: 2–30 Zeichen, nur Buchstaben, Ziffern, Punkt, Binde- oder Unterstrich.', 'err');
-            } elseif (mb_strlen($password) < 6) {
-                flash('Das Passwort muss mindestens 6 Zeichen haben.', 'err');
+            } elseif ($err = credential_error($role, $password)) {
+                flash($err, 'err');
             } else {
                 try {
                     $pdo->prepare('INSERT INTO users (username, password_hash, role, created_at) VALUES (?, ?, ?, ?)')
@@ -37,13 +37,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         case 'password':
             if (!$target) break;
-            if (mb_strlen($password) < 6) {
-                flash('Das Passwort muss mindestens 6 Zeichen haben.', 'err');
+            if ($err = credential_error($target['role'], $password)) {
+                flash($err, 'err');
                 break;
             }
-            $pdo->prepare('UPDATE users SET password_hash = ? WHERE id = ?')
+            // Neue Zugangsdaten heben auch eine Sperre nach Fehlversuchen auf
+            $pdo->prepare('UPDATE users SET password_hash = ?, failed_logins = 0, locked_until = 0 WHERE id = ?')
                 ->execute([password_hash($password, PASSWORD_DEFAULT), $id]);
-            flash("Passwort für „{$target['username']}“ geändert.");
+            $what = uses_pin($target['role']) ? 'PIN' : 'Passwort';
+            flash("{$what} für „{$target['username']}“ geändert.");
             break;
 
         case 'role':
@@ -52,8 +54,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 flash('Es muss mindestens ein Vorstand bleiben.', 'err');
                 break;
             }
-            $pdo->prepare('UPDATE users SET role = ? WHERE id = ?')->execute([$role, $id]);
-            flash("Rolle von „{$target['username']}“ ist jetzt " . ROLES[$role] . ".");
+            if ($role === $target['role']) break;
+            // Kasse nutzt eine PIN, Vorstand ein Passwort: alte Zugangsdaten passen nicht mehr
+            $pdo->prepare('UPDATE users SET role = ?, password_hash = ? WHERE id = ?')
+                ->execute([$role, password_hash(bin2hex(random_bytes(16)), PASSWORD_DEFAULT), $id]);
+            $what = uses_pin($role) ? 'eine neue 4-stellige PIN' : 'ein neues Passwort';
+            flash("„{$target['username']}“ ist jetzt " . ROLES[$role] . ". Bitte jetzt {$what} festlegen – vorher ist keine Anmeldung möglich.");
             break;
 
         case 'delete':
@@ -73,7 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     redirect('benutzer.php');
 }
 
-$users = $pdo->query('SELECT id, username, role, created_at FROM users ORDER BY role DESC, username')->fetchAll();
+$users = $pdo->query('SELECT id, username, role, created_at, locked_until FROM users ORDER BY role DESC, username')->fetchAll();
 
 page_header('Benutzer', $user, 'benutzer.php');
 ?>
@@ -81,7 +87,7 @@ page_header('Benutzer', $user, 'benutzer.php');
   <div class="page-head">
     <div>
       <h1>Benutzer</h1>
-      <p>Wer sich an der Theke anmelden darf.</p>
+      <p>Wer sich an der Theke anmelden darf. Kassen melden sich mit einer 4-stelligen PIN an, der Vorstand mit Passwort.</p>
     </div>
   </div>
 
@@ -89,11 +95,11 @@ page_header('Benutzer', $user, 'benutzer.php');
     <h2>Zugänge</h2>
     <div class="table-wrap">
       <table class="stack users">
-        <thead><tr><th>Benutzer</th><th>Rolle</th><th>Neues Passwort</th><th></th></tr></thead>
+        <thead><tr><th>Benutzer</th><th>Rolle</th><th>Neue PIN / neues Passwort</th><th></th></tr></thead>
         <tbody>
         <?php foreach ($users as $u): ?>
           <tr>
-            <td class="c-user"><strong><?= e($u['username']) ?></strong><?= (int) $u['id'] === (int) $user['id'] ? ' <span class="muted">(du)</span>' : '' ?></td>
+            <td class="c-user"><strong><?= e($u['username']) ?></strong><?= (int) $u['id'] === (int) $user['id'] ? ' <span class="muted">(du)</span>' : '' ?><?= (int) $u['locked_until'] > time() ? ' <span class="badge-locked">gesperrt</span>' : '' ?></td>
             <td class="c-role" data-label="Rolle">
               <form method="post" class="inline-form">
                 <?= csrf_field() ?>
@@ -106,12 +112,17 @@ page_header('Benutzer', $user, 'benutzer.php');
                 </select>
               </form>
             </td>
-            <td class="c-pw" data-label="Neues Passwort">
+            <?php $pin = uses_pin($u['role']); ?>
+            <td class="c-pw" data-label="<?= $pin ? 'Neue PIN' : 'Neues Passwort' ?>">
               <form method="post" class="pw-form">
                 <?= csrf_field() ?>
                 <input type="hidden" name="action" value="password">
                 <input type="hidden" name="id" value="<?= (int) $u['id'] ?>">
+                <?php if ($pin): ?>
+                <input type="password" name="password" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" minlength="4" required placeholder="4-stellige PIN" autocomplete="off" title="Genau 4 Ziffern" aria-label="Neue PIN für <?= e($u['username']) ?>">
+                <?php else: ?>
                 <input type="password" name="password" minlength="6" required placeholder="mind. 6 Zeichen" autocomplete="new-password" aria-label="Neues Passwort für <?= e($u['username']) ?>">
+                <?php endif; ?>
                 <button class="btn small">Ändern</button>
               </form>
             </td>
@@ -139,13 +150,29 @@ page_header('Benutzer', $user, 'benutzer.php');
     <div class="form-grid user-grid">
       <label class="wide">Benutzername <input name="username" required maxlength="30" placeholder="z. B. kasse3"></label>
       <label>Rolle
-        <select name="role">
+        <select name="role" id="new-role">
           <?php foreach (ROLES as $k => $v): ?><option value="<?= e($k) ?>" <?= $k === 'kasse' ? 'selected' : '' ?>><?= e($v) ?></option><?php endforeach; ?>
         </select>
       </label>
-      <label class="wide">Passwort <input type="password" name="password" required minlength="6" autocomplete="new-password"></label>
+      <label class="wide"><span id="new-secret-label">PIN (4 Ziffern)</span>
+        <input type="password" name="password" id="new-secret" required inputmode="numeric" pattern="[0-9]{4}" minlength="4" maxlength="4" autocomplete="off" title="Genau 4 Ziffern">
+      </label>
     </div>
     <p style="margin:20px 0 0"><button class="btn primary">Anlegen</button></p>
   </form>
 </main>
+<script>
+  // Beim Anlegen: Kasse bekommt eine PIN, Vorstand ein Passwort
+  (function () {
+    var role = document.getElementById('new-role'), input = document.getElementById('new-secret');
+    role.addEventListener('change', function () {
+      var pin = role.value === 'kasse';
+      document.getElementById('new-secret-label').textContent = pin ? 'PIN (4 Ziffern)' : 'Passwort (mind. 6 Zeichen)';
+      input.value = '';
+      input.inputMode = pin ? 'numeric' : 'text';
+      if (pin) { input.pattern = '[0-9]{4}'; input.minLength = 4; input.maxLength = 4; input.title = 'Genau 4 Ziffern'; input.autocomplete = 'off'; }
+      else { input.removeAttribute('pattern'); input.minLength = 6; input.removeAttribute('maxlength'); input.title = ''; input.autocomplete = 'new-password'; }
+    });
+  })();
+</script>
 <?php page_footer();

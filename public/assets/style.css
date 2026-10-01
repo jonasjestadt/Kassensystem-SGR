@@ -99,8 +99,9 @@ h2 { font-size: 24px; }
   display: flex; align-items: center; gap: 8px;
   color: var(--text); font-weight: 600; font-size: 17px; white-space: nowrap;
 }
-.brand img { width: 26px; height: auto; display: block; }
-.auth-logo { display: block; width: 88px; height: auto; margin: 0 auto 24px; }
+.brand img { width: 38px; height: auto; display: block; }
+.brand { gap: 10px; font-size: 18px; }
+.auth-logo { display: block; width: 130px; height: auto; margin: 0 auto 24px; }
 .brand:hover { text-decoration: none; }
 .topbar nav { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; }
 .topbar nav::-webkit-scrollbar { display: none; }
@@ -463,27 +464,6 @@ button, a, input, select, label { touch-action: manipulation; }
 
 /* ---------- Handy (und schmale Tablets) ---------- */
 @media (max-width: 700px) {
-  /* Navigation als Menü */
-  .topbar { position: sticky; }
-  .menu-toggle {
-    display: inline-flex; align-items: center; gap: 8px;
-    border: 0; border-radius: 980px; padding: 8px 14px; min-height: 40px;
-    background: var(--fill); color: var(--text); font: inherit; font-size: 15px; font-weight: 500; cursor: pointer;
-  }
-  .topbar nav {
-    display: none; position: absolute; top: 100%; left: 0; right: 0;
-    flex-direction: column; gap: 0; padding: 6px 0 10px;
-    background: var(--surface); border-bottom: 1px solid var(--hairline);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, .12);
-  }
-  .topbar.open nav { display: flex; animation: rise .2s ease; }
-  .topbar nav a {
-    font-size: 19px; color: var(--text); padding: 14px 22px; border-radius: 0; margin: 0;
-  }
-  .topbar nav a.active { background: transparent; color: var(--green); font-weight: 600; }
-  .topbar nav a.logout { margin: 6px 0 0; border-top: 1px solid var(--hairline); color: var(--danger); padding-top: 16px; }
-  .topbar nav a.logout .who { color: var(--muted); }
-
   main { padding: 20px 16px 48px; }
   h1 { font-size: 30px; }
   .page-head { margin-bottom: 18px; }
@@ -495,7 +475,7 @@ button, a, input, select, label { touch-action: manipulation; }
   .card-head { margin-bottom: 12px; }
   .card > p > .btn.primary { width: 100%; padding: 14px; font-size: 17px; }
   main.narrow { padding-top: 24px; }
-  .auth-logo { width: 72px; margin-bottom: 18px; }
+  .auth-logo { width: 110px; margin-bottom: 18px; }
 
   /* Tabellen werden zu gestapelten Karten */
   .table-wrap { margin: 0; overflow: visible; }
@@ -680,3 +660,110 @@ dialog.confirm { width: min(380px, calc(100vw - 32px)); text-align: center; padd
 .btn.danger-fill { background: var(--danger); color: #fff; }
 .btn.danger-fill:hover { background: var(--danger); filter: brightness(.92); text-decoration: none; }
 @media (max-width: 700px) { dialog.confirm { width: 100%; } }
+
+/* ---------- Anmeldung: Benutzerwahl + PIN-Ziffernfeld ---------- */
+.login h1 { font-size: 28px; text-align: center; margin-bottom: 20px; }
+.login-step[hidden] { display: none; }
+.user-tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 10px; }
+.user-tile {
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  padding: 16px 8px 14px; border: 0; border-radius: 16px; cursor: pointer;
+  background: var(--fill); color: var(--text); font: inherit;
+  transition: background .2s, transform .1s;
+}
+.user-tile:hover { background: var(--fill-strong); }
+.user-tile:active { transform: scale(.97); }
+.avatar {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 56px; height: 56px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--lime), var(--green)); color: #fff;
+  font-size: 24px; font-weight: 600;
+}
+.avatar.vorstand { background: linear-gradient(135deg, #7a8a99, #3d4a56); }
+.user-name { font-size: 17px; font-weight: 600; }
+.user-role { font-size: 13px; color: var(--muted); margin-top: -4px; }
+
+.back { display: block; margin: -6px 0 8px; font-size: 15px; }
+.login-who { display: flex; flex-direction: column; align-items: center; gap: 10px; margin-bottom: 6px; }
+.login-who h1 { margin: 0; }
+.login-who .avatar { width: 64px; height: 64px; font-size: 28px; }
+.login-error { margin: 8px 0 0; text-align: center; font-size: 15px; color: var(--danger); }
+.login-error[hidden], #pin-area[hidden], #pw-area[hidden] { display: none; }
+#pw-area { margin-top: 18px; }
+
+.pin-hint { margin: 16px 0 10px; text-align: center; color: var(--muted); font-size: 15px; }
+.pin-dots { display: flex; justify-content: center; gap: 18px; margin-bottom: 26px; }
+.pin-dots i {
+  width: 14px; height: 14px; border-radius: 50%;
+  border: 1.6px solid var(--text); transition: background .12s;
+}
+.pin-dots i.on { background: var(--text); }
+.pin-dots.shake { animation: shake .4s ease; }
+@keyframes shake { 20%, 60% { transform: translateX(-10px); } 40%, 80% { transform: translateX(10px); } }
+
+.keypad { display: grid; grid-template-columns: repeat(3, 76px); justify-content: center; gap: 14px 22px; }
+.keypad button {
+  width: 76px; height: 76px; border-radius: 50%; border: 0; cursor: pointer;
+  background: var(--fill); color: var(--text); font: inherit; font-size: 30px; font-weight: 400;
+  transition: background .12s;
+  -webkit-user-select: none; user-select: none;
+}
+.keypad button:active { background: var(--fill-strong); }
+@media (hover: hover) { .keypad button:hover { background: var(--fill-strong); } }
+.keypad .key-del { background: transparent; display: inline-flex; align-items: center; justify-content: center; }
+@media (max-width: 380px) {
+  .keypad { grid-template-columns: repeat(3, 68px); gap: 12px 18px; }
+  .keypad button { width: 68px; height: 68px; font-size: 26px; }
+}
+.badge-locked { display: inline-block; margin-left: 6px; padding: 2px 8px; border-radius: 980px; font-size: 12px; font-weight: 600; background: rgba(215, 0, 21, .1); color: var(--danger); vertical-align: middle; }
+
+/* ---------- Kompakte Navigation (Menü-Knopf) ----------
+   Wird per Skript aktiviert, sobald die Einträge nicht nebeneinander passen –
+   unabhängig von Bildschirmbreite und eingestellter Schriftgröße. */
+.topbar.compact .menu-toggle {
+  display: inline-flex; align-items: center; gap: 8px;
+  border: 0; border-radius: 980px; padding: 8px 14px; min-height: 40px;
+  background: var(--fill); color: var(--text); font: inherit; font-size: 15px; font-weight: 500; cursor: pointer;
+}
+.topbar.compact nav {
+  display: none; position: absolute; top: 100%; left: 0; right: 0;
+  flex-direction: column; gap: 0; padding: 6px 0 10px;
+  background: var(--surface); border-bottom: 1px solid var(--hairline);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, .12);
+}
+.topbar.compact.open nav { display: flex; animation: rise .2s ease; }
+.topbar.compact nav a {
+  font-size: 19px; color: var(--text); padding: 14px 22px; border-radius: 0; margin: 0;
+}
+.topbar.compact nav a.active { background: transparent; color: var(--green); font-weight: 600; }
+.topbar.compact nav a.logout { margin: 6px 0 0; border-top: 1px solid var(--hairline); color: var(--danger); padding-top: 16px; }
+.topbar.compact nav a.logout .who { color: var(--muted); }
+.topbar.compact nav a { white-space: nowrap; }
+
+/* ---------- Keine Zeilenumbrüche in Bedienelementen ---------- */
+.topbar, .topbar nav a, .brand, .menu-toggle, .btn, .link, .chips a, .segmented span,
+th, .field-label, label, .user-name, .user-role, .stat span, .stat strong,
+.total, .sheet-label, .card-head p, .section-title, .page-head h1, .card h2,
+.given button, .icon-grid button span:not(.ico), .tile-price, .c-time, .c-sum {
+  white-space: nowrap;
+}
+.page-head p { white-space: normal; }
+.stat { min-width: 0; overflow: hidden; }
+.stat span, .user-name { overflow: hidden; text-overflow: ellipsis; }
+.tile-name { white-space: nowrap; max-width: 100%; overflow: hidden; text-overflow: ellipsis; }
+.icon-grid button span:not(.ico) { max-width: 100%; overflow: hidden; text-overflow: ellipsis; }
+td.c-pname { width: 100%; max-width: 0; }
+.fit { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+@media (max-width: 700px) {
+  .bar-inline { display: none; }
+  table.orders .c-items { min-width: 0; }
+}
+/* Schmale Handys: zwei Kacheln pro Reihe, damit lange Namen in eine Zeile passen */
+@media (max-width: 599px) {
+  .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .tile { min-height: 112px; }
+  .tile-name { font-size: 16px; }
+}
+/* Symbol-Auswahl: breitere Felder, damit Namen vollständig in eine Zeile passen */
+.icon-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
+@media (max-width: 700px) { .icon-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }

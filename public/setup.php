@@ -13,8 +13,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     check_csrf();
     $pw = $_POST['pw'] ?? [];
     foreach ($accounts as $name => $role) {
-        if (mb_strlen((string) ($pw[$name] ?? '')) < 6) {
-            $errors[] = "Passwort für „{$name}“ muss mindestens 6 Zeichen haben.";
+        if ($err = credential_error($role, (string) ($pw[$name] ?? ''))) {
+            $errors[] = "„{$name}“: {$err}";
         }
     }
     if (!$errors) {
@@ -59,13 +59,19 @@ page_header('Ersteinrichtung');
   <img class="auth-logo" src="assets/logo.png" alt="Wappen SG Hermania Löschenrod" width="105" height="116">
   <form method="post" class="card">
     <h1>Ersteinrichtung</h1>
-    <p class="muted">Lege die Passwörter für die drei Zugänge fest. Weitere Benutzer kann der Vorstand später anlegen.</p>
+    <p class="muted">Lege das Passwort für den Vorstand und die 4-stelligen PINs für die beiden Kassen fest. Weitere Benutzer kann der Vorstand später anlegen.</p>
     <?php foreach ($errors as $err): ?><p class="flash err"><?= e($err) ?></p><?php endforeach; ?>
     <?= csrf_field() ?>
     <?php foreach ($accounts as $name => $role): ?>
-      <label>Passwort für <strong><?= e($name) ?></strong> <span class="muted">(<?= e(ROLES[$role]) ?>)</span>
+      <?php if (uses_pin($role)): ?>
+      <label>PIN für <strong><?= e($name) ?></strong> <span class="muted">(<?= e(ROLES[$role]) ?>, 4 Ziffern)</span>
+        <input type="password" name="pw[<?= e($name) ?>]" required inputmode="numeric" pattern="[0-9]{4}" minlength="4" maxlength="4" autocomplete="off" title="Genau 4 Ziffern">
+      </label>
+      <?php else: ?>
+      <label>Passwort für <strong><?= e($name) ?></strong> <span class="muted">(<?= e(ROLES[$role]) ?>, mind. 6 Zeichen)</span>
         <input type="password" name="pw[<?= e($name) ?>]" required minlength="6" autocomplete="new-password">
       </label>
+      <?php endif; ?>
     <?php endforeach; ?>
     <button class="btn primary big">Einrichten</button>
   </form>
