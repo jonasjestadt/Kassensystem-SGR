@@ -54,6 +54,19 @@ Unter **nginx** (eigener Server) zusätzlich in der Server-Konfiguration ergänz
 location ~ ^/(app|data)/ { deny all; }
 ```
 
+## Betrieb auf dem Strato-VPS
+
+Server: Ubuntu 24.04, nginx, PHP 8.3-FPM, SQLite. App liegt unter `/var/www/theke`
+(`app/`, `public/` = Webroot, `data/` = Datenbank, nur für `www-data`).
+
+- **Update einspielen:** Änderungen committen, dann `./deploy.sh` – überträgt den
+  committeten Stand von `app/` und `public/`, die Datenbank bleibt unberührt.
+- **Sicherheit:** Firewall (ufw) nur SSH/HTTP/HTTPS, SSH nur per Schlüssel,
+  fail2ban, automatische Sicherheitsupdates.
+- **nginx-Konfiguration:** `/etc/nginx/sites-available/theke`
+- **Backups:** täglich 3:30 Uhr nach `/var/backups/theke/` (30 Tage), Skript `/usr/local/bin/theke-backup`.
+  Wiederherstellen: Datei entpacken und als `/var/www/theke/data/kasse.sqlite` (Besitzer `www-data`) zurückkopieren.
+
 ## Datensicherung
 
 Alle Daten stecken in `data/kasse.sqlite`. Diese Datei regelmäßig herunterladen genügt als Backup.
