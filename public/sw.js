@@ -1,6 +1,6 @@
 // Service Worker: macht die Seite als App installierbar und lädt Design, Skripte
 // und Symbole aus dem Zwischenspeicher. Seiten und Bestellungen gehen immer ans Netz.
-const CACHE = 'theke-static-v1';
+const CACHE = 'theke-sgr-static-v1';
 
 self.addEventListener('install', () => self.skipWaiting());
 self.addEventListener('activate', (event) => {
