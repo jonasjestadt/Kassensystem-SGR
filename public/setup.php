@@ -56,7 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 page_header('Ersteinrichtung');
 ?>
 <main class="narrow">
-  <img class="auth-logo" src="assets/logo.png" alt="Wappen SG Rönshausen" width="105" height="116">
+  <img class="auth-logo" src="assets/logo.png" alt="Wappen SG Rönshausen" width="105" height="125">
   <form method="post" class="card">
     <h1>Ersteinrichtung</h1>
     <p class="muted">Lege das Passwort für den Vorstand und die 4-stelligen PINs für die beiden Kassen fest. Weitere Benutzer kann der Vorstand später anlegen.</p>
