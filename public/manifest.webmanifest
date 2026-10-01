@@ -1,8 +1,8 @@
 {
   "id": "./kasse.php",
-  "name": "SG Löschenrod – Theke",
+  "name": "SG Rönshausen – Theke",
   "short_name": "Theke",
-  "description": "Thekenkasse der SG Hermania Löschenrod",
+  "description": "Thekenkasse der SG Rönshausen",
   "lang": "de",
   "start_url": "./kasse.php",
   "scope": "./",

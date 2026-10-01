@@ -7,7 +7,7 @@
 set -eu
 
 HOST="${THEKE_HOST:-root@212.227.109.165}"
-TARGET=/var/www/theke
+TARGET=/var/www/theke-sgr
 
 cd "$(dirname "$0")"
 

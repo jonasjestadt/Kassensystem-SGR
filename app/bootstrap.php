@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 date_default_timezone_set('Europe/Berlin');
 
-const APP_NAME = 'SG Löschenrod – Theke';
+const APP_NAME = 'SG Rönshausen – Theke';
 const DATA_DIR = __DIR__ . '/../data';
 const DB_FILE  = DATA_DIR . '/kasse.sqlite';
 const SESSION_DAYS = 30; // Tablets an der Theke bleiben lange angemeldet
@@ -139,7 +139,7 @@ function start_session(): void
     $lifetime = SESSION_DAYS * 86400;
     session_save_path($dir);
     ini_set('session.gc_maxlifetime', (string) $lifetime);
-    session_name('sgl_kasse');
+    session_name('sgr_kasse');
     session_set_cookie_params([
         'lifetime' => $lifetime,
         'path'     => '/',
@@ -323,7 +323,7 @@ function page_header(string $title, ?array $user = null, string $active = '', st
 </head>
 <body class="<?= e($bodyClass) ?>">
 <header class="topbar">
-  <a class="brand" href="kasse.php"><img src="assets/logo.png" alt="" width="38" height="42">SG Löschenrod</a>
+  <a class="brand" href="kasse.php"><img src="assets/logo.png" alt="" width="38" height="42">SG Rönshausen</a>
   <button type="button" class="theme-toggle" aria-label="Hell/Dunkel umschalten" title="Hell/Dunkel umschalten">
     <svg class="i-moon" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11z" fill="currentColor"/></svg>
     <svg class="i-sun" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5" fill="currentColor"/><g stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></g></svg>

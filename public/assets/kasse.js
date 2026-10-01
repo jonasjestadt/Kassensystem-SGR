@@ -126,7 +126,7 @@
   });
 
   // ------------------------------------------------- Speichern / Warteschlange
-  const KEY = 'sgl_queue';
+  const KEY = 'sgr_queue';
   let memoryQueue = [];
   const readQueue = () => { try { return JSON.parse(localStorage.getItem(KEY)) || []; } catch { return memoryQueue; } };
   const writeQueue = (q) => { memoryQueue = q; try { localStorage.setItem(KEY, JSON.stringify(q)); } catch { /* privat */ } };

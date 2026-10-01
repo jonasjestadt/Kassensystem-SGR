@@ -1,4 +1,4 @@
-# SG Löschenrod – Theke
+# SG Rönshausen – Theke
 
 Internes Tool für den Thekendienst: Getränke und Speisen antippen, Gesamtpreis sehen, Rückgeld berechnen.
 Der Vorstand pflegt Artikel und Preise, verwaltet die Zugänge und sieht eine Auswertung für den Einkauf.
@@ -36,7 +36,7 @@ dev/        Lokaler Testserver (wird auf dem Server nicht gebraucht)
 ## Installation auf dem Server
 
 1. Die Ordner `app/`, `data/` und `public/` hochladen, z. B. nach `/theke/` (`dev/`, `package*.json` und `node_modules/` werden nicht gebraucht).
-2. Beim Hoster eine Subdomain anlegen, z. B. `theke.sgloeschenrod.de`, und als
+2. Beim Hoster eine Subdomain anlegen, z. B. `theke.sg-roenshausen.de`, und als
    **Zielverzeichnis `/theke/public`** einstellen. Damit sind Datenbank und Code von außen nicht erreichbar.
 3. SSL-Zertifikat (Let's Encrypt) für die Subdomain aktivieren.
 4. Sicherstellen, dass `data/` vom Webserver beschreibbar ist (meist automatisch, sonst Rechte 750/770).
@@ -56,16 +56,16 @@ location ~ ^/(app|data)/ { deny all; }
 
 ## Betrieb auf dem Strato-VPS
 
-Server: Ubuntu 24.04, nginx, PHP 8.3-FPM, SQLite. App liegt unter `/var/www/theke`
+Server: Ubuntu 24.04, nginx, PHP 8.3-FPM, SQLite. App liegt unter `/var/www/theke-sgr`
 (`app/`, `public/` = Webroot, `data/` = Datenbank, nur für `www-data`).
 
 - **Update einspielen:** Änderungen committen, dann `./deploy.sh` – überträgt den
   committeten Stand von `app/` und `public/`, die Datenbank bleibt unberührt.
 - **Sicherheit:** Firewall (ufw) nur SSH/HTTP/HTTPS, SSH nur per Schlüssel,
   fail2ban, automatische Sicherheitsupdates.
-- **nginx-Konfiguration:** `/etc/nginx/sites-available/theke`
-- **Backups:** täglich 3:30 Uhr nach `/var/backups/theke/` (30 Tage), Skript `/usr/local/bin/theke-backup`.
-  Wiederherstellen: Datei entpacken und als `/var/www/theke/data/kasse.sqlite` (Besitzer `www-data`) zurückkopieren.
+- **nginx-Konfiguration:** `/etc/nginx/sites-available/theke-sgr`
+- **Backups:** täglich 3:30 Uhr nach `/var/backups/theke-sgr/` (30 Tage), Skript `/usr/local/bin/theke-sgr-backup`.
+  Wiederherstellen: Datei entpacken und als `/var/www/theke-sgr/data/kasse.sqlite` (Besitzer `www-data`) zurückkopieren.
 
 ## Datensicherung
 
