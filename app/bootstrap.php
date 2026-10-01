@@ -30,7 +30,9 @@ const ICONS = [
     'essen' => [
         'bratwurst' => 'Bratwurst mit Brötchen', 'bratwurst-pommes' => 'Bratwurst mit Pommes',
         'steak' => 'Steak mit Brötchen', 'steak-pommes' => 'Steak mit Pommes',
-        'pommes' => 'Pommes', 'kuchen' => 'Kuchen',
+        'currywurst' => 'Currywurst mit Brötchen', 'currywurst-pommes' => 'Currywurst mit Pommes',
+        'nuggets' => 'Chicken Nuggets mit Brötchen', 'nuggets-pommes' => 'Chicken Nuggets mit Pommes',
+        'pommes' => 'Pommes', 'kuchen' => 'Kuchen', 'eis' => 'Eis',
     ],
     'sonstiges' => ['pfand' => 'Pfand'],
 ];
@@ -101,7 +103,33 @@ function migrate(PDO $pdo): void
         $pdo->exec('ALTER TABLE users ADD COLUMN failed_logins INTEGER NOT NULL DEFAULT 0');
         $pdo->exec('ALTER TABLE users ADD COLUMN locked_until INTEGER NOT NULL DEFAULT 0');
     }
+
+    // Einmalig: Artikel, die nach dem Startsortiment dazugekommen sind, in bestehende Kassen übernehmen.
+    // Bei einer neuen Installation (noch keine Artikel) legt setup.php sie mit an.
+    if ((int) $pdo->query('PRAGMA user_version')->fetchColumn() < 1) {
+        if ((int) $pdo->query('SELECT COUNT(*) FROM products')->fetchColumn() > 0) {
+            $sort = (int) $pdo->query('SELECT MAX(sort) FROM products')->fetchColumn();
+            $exists = $pdo->prepare('SELECT COUNT(*) FROM products WHERE icon = ?');
+            $ins = $pdo->prepare('INSERT INTO products (name, icon, category, price_cents, sort) VALUES (?, ?, ?, ?, ?)');
+            foreach (NEW_PRODUCTS_V1 as [$name, $icon, $cat, $price]) {
+                $exists->execute([$icon]);
+                if ((int) $exists->fetchColumn() === 0) {
+                    $ins->execute([$name, $icon, $cat, $price, $sort += 10]);
+                }
+            }
+        }
+        $pdo->exec('PRAGMA user_version = 1');
+    }
 }
+
+/** Artikel, die nach dem Startsortiment ergänzt wurden – Preise sind Platzhalter. */
+const NEW_PRODUCTS_V1 = [
+    ['Currywurst mit Brötchen',     'svg:currywurst',        'essen', 400],
+    ['Currywurst mit Pommes',       'svg:currywurst-pommes', 'essen', 650],
+    ['Nuggets mit Brötchen', 'svg:nuggets',                 'essen', 400],
+    ['Nuggets mit Pommes',  'svg:nuggets-pommes',       'essen', 600],
+    ['Eis',                         'svg:eis',               'essen', 200],
+];
 
 // ------------------------------------------------------- Zugangsdaten
 
