@@ -55,7 +55,7 @@ foreach ($users as $u) {
 page_header('Anmelden');
 ?>
 <main class="narrow login">
-  <img class="auth-logo" src="assets/logo.png" alt="Wappen SG Rönshausen" width="105" height="125">
+  <img class="auth-logo" src="<?= asset('assets/logo.png') ?>" alt="Wappen SG Rönshausen" width="105" height="125">
 
   <!-- Schritt 1: Wer hat Dienst? -->
   <section class="card login-step" id="step-user" <?= $selected ? 'hidden' : '' ?>>
